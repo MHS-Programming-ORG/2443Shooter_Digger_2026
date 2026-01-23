@@ -12,7 +12,8 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
-    shooterSub.setShooterSetpoint(0.3);
+    shooterSub.setShooterGuideSpeed(0.5);
+    shooterSub.setShooterSetpoint(0.7);
   }
 
   @Override

@@ -19,13 +19,15 @@ public final class Constants {
   public static class ShooterConstants {
     // PORTS
     //public static final int SHOOTER_PIVOTENC_PORT = 1;
-    public static final int SHOOTER_MOTOR_PORT = 2;
+    public static final int SHOOTER_MOTOR1_PORT = 2;
+    public static final int SHOOTER_MOTOR2_PORT = 3;
+    public static final int SHOOTER_GUIDE_PORT = 4;
     //PID VALUES
     public static final double SHOOTER_KP = 0.01;
     public static final double SHOOTER_KI = 0;
     public static final double SHOOTER_KD = 0;
     //SPEED
-    public static final double SHOOTER_MAXSPEED = 1;
-    public static final double SHOOTER_MINSPEED = 0.1;
+    public static final double SHOOTER_MAXSPEED = 0.95;
+    public static final double SHOOTER_MINSPEED = -0.95;
   }
 }
