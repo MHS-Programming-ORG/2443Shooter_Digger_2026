@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants.ShooterConstants;
 
 public class ShooterCommand extends Command {
   private ShooterSubsystem shooterSub;
@@ -12,8 +13,8 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
-    shooterSub.setShooterGuideSpeed(0.5);
-    shooterSub.setShooterSetpoint(0.7);
+    shooterSub.setShooterGuideSpeed(ShooterConstants.SHOOTER_GUIDESPEED);
+    shooterSub.setShooterSetpoint(ShooterConstants.SHOOTER_MOTORSPEED);
   }
 
   @Override

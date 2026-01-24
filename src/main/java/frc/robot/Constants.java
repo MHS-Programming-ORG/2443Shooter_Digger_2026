@@ -29,5 +29,7 @@ public final class Constants {
     //SPEED
     public static final double SHOOTER_MAXSPEED = 0.95;
     public static final double SHOOTER_MINSPEED = -0.95;
+    public static final double SHOOTER_GUIDESPEED = 0.5;
+    public static final double SHOOTER_MOTORSPEED = 0.7;
   }
 }
