@@ -31,5 +31,10 @@ public final class Constants {
     public static final double SHOOTER_MINSPEED = -0.95;
     public static final double SHOOTER_GUIDESPEED = 0.5;
     public static final double SHOOTER_MOTORSPEED = 0.7;
+    //MASUREMENTS
+    public static final double SHOOTER_GUIDEWHEEL_RADIUS = 1; // IN METERS
+    public static final double SHOOTER_MOTORWHEEL_RADIUS = 1; // IN METERS
+    public static final double SHOOTER_GUIDE_GEAR_RATIO = 1/2; 
+    public static final double SHOOTER_MOTOR_GEAR_RATIO = 1/1;
   }
 }

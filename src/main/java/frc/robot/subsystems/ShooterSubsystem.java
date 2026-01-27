@@ -10,11 +10,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.photonvision.PhotonCamera;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.ShooterCommand;
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private static double shooterOuput, prevError, output;
-  private static PhotonCamera camera;
+  private static double shooterOuput, prevError, output, dist;
+  private static ShooterCalc shooterCalc;
+  private static ArduCam camera;
   private static boolean pidOn;
   private static PIDController shooterPIDCtrler;
   private static TalonFX shooterMotor1, shooterMotor2, shooterguide;
@@ -22,12 +24,14 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     prevError = 0;
     output = 0;
+    shooterCalc = new ShooterCalc();
+    camera = new ArduCam();
     shooterPIDCtrler = new PIDController(ShooterConstants.SHOOTER_KP,ShooterConstants.SHOOTER_KI,ShooterConstants.SHOOTER_KD);
     shooterMotor1 = new TalonFX(ShooterConstants.SHOOTER_MOTOR1_PORT);
     shooterMotor2 = new TalonFX(ShooterConstants.SHOOTER_MOTOR2_PORT);
     shooterguide = new TalonFX(ShooterConstants.SHOOTER_GUIDE_PORT);
     shooterOuput = shooterMotor1.getDutyCycle().getValueAsDouble();
-    camera = new PhotonCamera("Ardu cam");
+    dist = camera.getX();
     pidOn = false;
   }
 
@@ -44,8 +48,12 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor2.set(-speed);
   }
 
+  public double convertDist_Vel(){
+    return shooterCalc.calculateLaunchVelocity(dist);
+  }
+
   public double getShooterOutput(){
-    return shooterOuput;
+    return (convertDist_Vel() / 2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS) / 100;
   }
 
 
