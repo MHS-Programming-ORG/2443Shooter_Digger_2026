@@ -13,7 +13,6 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
-    shooterSub.setShooterGuideSpeed(ShooterConstants.SHOOTER_GUIDESPEED);
     shooterSub.setShooterSetpoint(ShooterConstants.SHOOTER_MOTORSPEED);
   }
 

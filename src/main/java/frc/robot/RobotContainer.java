@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,8 +18,12 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    xbox.x().onTrue(shooterCmd);
-    xbox.a().onTrue(new InstantCommand(()->shooterSub.setShooterSetpoint(0)));
+    //xbox.x().whileTrue(shooterCmd);
+    //xbox.x().whileFalse(new InstantCommand(()->shooterSub.setShooterSetpoint(0)));
+    xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0)));
+    xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0.7)));
+    xbox.rightBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(ShooterConstants.SHOOTER_GUIDESPEED)));
+    xbox.rightBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
   }
   public Command getAutonomousCommand() {
     return null;

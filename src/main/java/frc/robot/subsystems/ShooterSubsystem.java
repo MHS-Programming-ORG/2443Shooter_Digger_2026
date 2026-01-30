@@ -16,7 +16,7 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private static double shooterOuput, prevError, output, dist;
   private static ShooterCalc shooterCalc;
-  private static ArduCam camera;
+  //private static ArduCam camera;
   private static boolean pidOn;
   private static PIDController shooterPIDCtrler;
   private static TalonFX shooterMotor1, shooterMotor2, shooterguide;
@@ -25,13 +25,13 @@ public class ShooterSubsystem extends SubsystemBase {
     prevError = 0;
     output = 0;
     shooterCalc = new ShooterCalc();
-    camera = new ArduCam();
+    //camera = new ArduCam();
     shooterPIDCtrler = new PIDController(ShooterConstants.SHOOTER_KP,ShooterConstants.SHOOTER_KI,ShooterConstants.SHOOTER_KD);
     shooterMotor1 = new TalonFX(ShooterConstants.SHOOTER_MOTOR1_PORT);
     shooterMotor2 = new TalonFX(ShooterConstants.SHOOTER_MOTOR2_PORT);
     shooterguide = new TalonFX(ShooterConstants.SHOOTER_GUIDE_PORT);
     shooterOuput = shooterMotor1.getDutyCycle().getValueAsDouble();
-    dist = camera.getX();
+    //dist = camera.getX();
     pidOn = false;
   }
 
@@ -48,12 +48,13 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor2.set(-speed);
   }
 
-  public double convertDist_Vel(){
-    return shooterCalc.calculateLaunchVelocity(dist);
-  }
+  //public double convertDist_Vel(){
+  //  return shooterCalc.calculateLaunchVelocity(dist);
+  //}
 
   public double getShooterOutput(){
-    return (convertDist_Vel() / 2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS) / 100;
+    return shooterOuput;
+    //return (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100;
   }
 
 
@@ -67,7 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double currError = getShooterSetpoint() - getShooterOutput();
+    /* =double currError = getShooterSetpoint() - getShooterOutput();
     if(pidOn){
       output = shooterPIDCtrler.calculate(getShooterOutput(), getShooterSetpoint());
       if(output > ShooterConstants.SHOOTER_MAXSPEED){
@@ -82,8 +83,11 @@ public class ShooterSubsystem extends SubsystemBase {
       }
       prevError = currError;
     }
+    
     setShooterMotorSpeed(output);
+    */
     SmartDashboard.putNumber("[Shooter] Motor Vel:", getShooterOutput());
     SmartDashboard.putNumber("[Shooter] Setpoint:", getShooterSetpoint());
+    //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
   }
 }

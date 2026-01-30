@@ -20,8 +20,8 @@ public final class Constants {
     // PORTS
     //public static final int SHOOTER_PIVOTENC_PORT = 1;
     public static final int SHOOTER_MOTOR1_PORT = 2;
-    public static final int SHOOTER_MOTOR2_PORT = 3;
-    public static final int SHOOTER_GUIDE_PORT = 4;
+    public static final int SHOOTER_MOTOR2_PORT = 4;
+    public static final int SHOOTER_GUIDE_PORT = 3;
     //PID VALUES
     public static final double SHOOTER_KP = 0.01;
     public static final double SHOOTER_KI = 0;
@@ -33,7 +33,7 @@ public final class Constants {
     public static final double SHOOTER_MOTORSPEED = 0.7;
     //MASUREMENTS
     public static final double SHOOTER_GUIDEWHEEL_RADIUS = 1; // IN METERS
-    public static final double SHOOTER_MOTORWHEEL_RADIUS = 1; // IN METERS
+    public static final double SHOOTER_MOTORWHEEL_RADIUS = 0.04; // IN METERS
     public static final double SHOOTER_GUIDE_GEAR_RATIO = 1/2; 
     public static final double SHOOTER_MOTOR_GEAR_RATIO = 1/1;
   }
