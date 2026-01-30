@@ -13,6 +13,7 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
+    shooterSub.setPidState(true);
     shooterSub.setShooterSetpoint(ShooterConstants.SHOOTER_MOTORSPEED);
   }
 
@@ -20,10 +21,12 @@ public class ShooterCommand extends Command {
   public void execute() {}
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooterSub.setShooterSetpoint(0);
+  }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return shooterSub.atSetpoint();
   }
 }

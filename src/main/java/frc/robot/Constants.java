@@ -23,8 +23,8 @@ public final class Constants {
     public static final int SHOOTER_MOTOR2_PORT = 4;
     public static final int SHOOTER_GUIDE_PORT = 3;
     //PID VALUES
-    public static final double SHOOTER_KP = 0.01;
-    public static final double SHOOTER_KI = 0;
+    public static final double SHOOTER_KP = 1;
+    public static final double SHOOTER_KI = 0.001;
     public static final double SHOOTER_KD = 0;
     //SPEED
     public static final double SHOOTER_MAXSPEED = 0.95;

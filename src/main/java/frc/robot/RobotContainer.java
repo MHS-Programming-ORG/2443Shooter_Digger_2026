@@ -18,10 +18,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    //xbox.x().whileTrue(shooterCmd);
-    //xbox.x().whileFalse(new InstantCommand(()->shooterSub.setShooterSetpoint(0)));
-    xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0)));
-    xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0.7)));
+    xbox.x().onTrue(shooterCmd);
+    xbox.y().onTrue(new InstantCommand(()->shooterSub.setShooterSetpoint(0)));
+    //xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0)));
+    //xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0.7)));
     xbox.rightBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(ShooterConstants.SHOOTER_GUIDESPEED)));
     xbox.rightBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
   }
