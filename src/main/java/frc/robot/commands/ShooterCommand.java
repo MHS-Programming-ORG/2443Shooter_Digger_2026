@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.Constants.ShooterConstants;
 
 public class ShooterCommand extends Command {
   private ShooterSubsystem shooterSub;
@@ -24,6 +24,6 @@ public class ShooterCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return new CommandXboxController(0).a().getAsBoolean();
   }
 }
