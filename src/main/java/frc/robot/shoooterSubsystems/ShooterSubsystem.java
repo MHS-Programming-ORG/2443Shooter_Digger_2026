@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.shoooterSubsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -86,7 +86,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shooterShoot(){
-    if(camera.camerVisable())
+    if(camera.cameraVisable())
     {
      double motorRPS = shooterCalcvV2.getRPSForDistance(camera.getX());
      setShooterVelocity(motorRPS);
@@ -98,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // add speed limit here
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
-    SmartDashboard.putNumber("ArudoCam", camera.getX());
+    SmartDashboard.putNumber("ArduCam", camera.getX());
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());

@@ -1,13 +1,13 @@
-package frc.robot.subsystems;
+package frc.robot.shoooterSubsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterCalcV2 {
     private final double[][] shooterData = {
-        {10, 1.2},
-        {20, 2.0},
-        {30, 3.1},
-        {40, 4.3},
+        {50, 0},
+        {50, 1.0},
+        {50, 3.1},
+        {50, 4.3},
         {50, 5.6},
         {60, 6.8},
         {70, 8.0},

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.shoooterSubsystems;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -10,22 +10,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //http://photonvision.local:5800/#/dashboard
 public class ArduCam extends SubsystemBase{
     private PhotonCamera camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
-    private PhotonPipelineResult result = camera.getLatestResult();
-    private PhotonTrackedTarget target = result.getBestTarget();
-    // private Transform3d bestCameraToTarget = target.getBestCameraToTarget();
+    private PhotonPipelineResult result = new PhotonPipelineResult();
+    private PhotonTrackedTarget target;
+    private Transform3d bestCameraToTarget = target.getBestCameraToTarget();
 
     public double getX(){
-        // return bestCameraToTarget.getX();
-        return 0;
+        return bestCameraToTarget.getX();
     }
 
-    public boolean camerVisable(){
+    public boolean cameraVisable(){
         return result.hasTargets();
     }
 
     @Override
     public void periodic() {
-
         SmartDashboard.putBoolean(
             "NT Connected",
             NetworkTableInstance.getDefault().isConnected()
@@ -51,6 +49,7 @@ public class ArduCam extends SubsystemBase{
 
         if (result.hasTargets()) {
             PhotonTrackedTarget target = result.getBestTarget();
+            var result = camera.getLatestResult();
             int targetID = target.getFiducialId();
             double poseAmbiguity = target.getPoseAmbiguity();
             Transform3d bestCameraToTarget = target.getBestCameraToTarget();

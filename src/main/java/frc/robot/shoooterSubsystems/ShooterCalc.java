@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.shoooterSubsystems;
 
 public class ShooterCalc {
 
