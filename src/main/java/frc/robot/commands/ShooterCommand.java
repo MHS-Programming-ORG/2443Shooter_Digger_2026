@@ -24,6 +24,6 @@ public class ShooterCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return new CommandXboxController(0).a().getAsBoolean();
+    return false;
   }
 }

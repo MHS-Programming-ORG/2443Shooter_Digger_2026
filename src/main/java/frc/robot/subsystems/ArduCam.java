@@ -12,10 +12,15 @@ public class ArduCam extends SubsystemBase{
     private PhotonCamera camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
     private PhotonPipelineResult result = camera.getLatestResult();
     private PhotonTrackedTarget target = result.getBestTarget();
-    private Transform3d bestCameraToTarget = target.getBestCameraToTarget();
+    // private Transform3d bestCameraToTarget = target.getBestCameraToTarget();
 
     public double getX(){
-        return bestCameraToTarget.getX();
+        // return bestCameraToTarget.getX();
+        return 0;
+    }
+
+    public boolean camerVisable(){
+        return result.hasTargets();
     }
 
     @Override

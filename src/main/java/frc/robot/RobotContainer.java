@@ -29,6 +29,9 @@ public class RobotContainer {
     //xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterMotorSpeed(0.7)));
     xbox.rightBumper().whileTrue(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(ShooterConstants.SHOOTER_GUIDESPEED)));
     xbox.rightBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
+    xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
+    //xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
+
   }
   public Command getAutonomousCommand() {
     return null;
