@@ -16,25 +16,4 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static class ShooterConstants {
-    // PORTS
-    //public static final int SHOOTER_PIVOTENC_PORT = 1;
-    public static final int SHOOTER_MOTOR1_PORT = 2;
-    public static final int SHOOTER_MOTOR2_PORT = 4;
-    public static final int SHOOTER_GUIDE_PORT = 3;
-    //PID VALUES
-    public static final double SHOOTER_KP = .66;
-    public static final double SHOOTER_KI = 0;
-    public static final double SHOOTER_KD = 0;
-    //SPEED
-    public static final double SHOOTER_MAXSPEED = 100;
-    public static final double SHOOTER_MINSPEED = 70;
-    public static final double SHOOTER_GUIDESPEED = 70; //IN RPS
-    public static final double SHOOTER_MOTORSPEED = 10; //IN RPS
-    //MASUREMENTS
-    public static final double SHOOTER_GUIDEWHEEL_RADIUS = 1; // IN METERS
-    public static final double SHOOTER_MOTORWHEEL_RADIUS = 0.04; // IN METERS
-    public static final double SHOOTER_GUIDE_GEAR_RATIO = 1/2; 
-    public static final double SHOOTER_MOTOR_GEAR_RATIO = 48/50;
-  }
 }

@@ -3,6 +3,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,16 +11,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //http://photonvision.local:5800/#/dashboard
 public class ArduCam extends SubsystemBase{
     private PhotonCamera camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
-    private PhotonPipelineResult result = new PhotonPipelineResult();
-    private PhotonTrackedTarget target;
+    private PhotonPipelineResult result = camera.getLatestResult();
+    private PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
     private Transform3d bestCameraToTarget = target.getBestCameraToTarget();
-
-    public double getX(){
-        return bestCameraToTarget.getX();
-    }
 
     public boolean cameraVisable(){
         return result.hasTargets();
+    }
+    
+    public double getX(){
+        return cameraVisable()? bestCameraToTarget.getX() : 0;
     }
 
     @Override

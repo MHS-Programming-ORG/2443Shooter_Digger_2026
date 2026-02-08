@@ -6,40 +6,36 @@ package frc.robot.shoooterSubsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.photonvision.PhotonCamera;
-import frc.robot.Constants.ShooterConstants;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private static Encoder shooter1Enc, shooter2Enc;
-  private static ShooterCalc shooterCalc;
-  private static ShooterCalcV2 shooterCalcvV2;
-  private static ArduCam camera;
-  private static TalonFX shooterMotor1, shooterMotor2, shooterguide;
-  
-  private static final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+  private static final double[] shooterPIDVals = {0.66, 0, 0};
+  private ShooterCalcV3 shooterCalcV3;
+  private ShooterCalcV2 shooterCalcvV2;
+  private ArduCam camera = new ArduCam();
+  private TalonFX shooterMotor1, shooterMotor2, shooterguide;
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
-  public ShooterSubsystem() {
-    // shooterCalc = new ShooterCalc();
+  public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort,
+  double shooterToGearRatio) {
     shooterCalcvV2 = new ShooterCalcV2();
-    camera = new ArduCam();
+    shooterCalcV3 = new ShooterCalcV3();
+    this.camera = camera;
 
-    shooterMotor1 = new TalonFX(ShooterConstants.SHOOTER_MOTOR1_PORT);
-    shooterMotor2 = new TalonFX(ShooterConstants.SHOOTER_MOTOR2_PORT);
-    shooterguide = new TalonFX(ShooterConstants.SHOOTER_GUIDE_PORT);
+    shooterMotor1 = new TalonFX(shooterPort1);
+    shooterMotor2 = new TalonFX(shooterPort2);
+    shooterguide = new TalonFX(kickerPort);
 
     var config = new TalonFXConfiguration();
-    config.Slot0.kP = ShooterConstants.SHOOTER_KP;
-    config.Slot0.kI = ShooterConstants.SHOOTER_KI;
-    config.Slot0.kD = ShooterConstants.SHOOTER_KD;
-    config.Feedback.SensorToMechanismRatio = ShooterConstants.SHOOTER_MOTOR_GEAR_RATIO;
+    config.Slot0.kP = shooterPIDVals[0];
+    config.Slot0.kI = shooterPIDVals[1];
+    config.Slot0.kD = shooterPIDVals[2];
+    config.Feedback.SensorToMechanismRatio = shooterToGearRatio;
     
     shooterMotor1.getConfigurator().apply(config);
     shooterMotor2.getConfigurator().apply(config);
@@ -53,14 +49,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterguide.setControl(new VelocityVoltage(speed));
   }
 
-  public void setLeftShooterMotorSpeed(double speed){
-    shooterMotor1.set(speed);
-  }
-
-  public void setRightShooterMotorSpeed(double speed){
-    shooterMotor2.set(-speed);
-  }
-
   public void stopShooterMotors(){
     shooterMotor1.set(0);
     shooterMotor2.set(0);
@@ -68,13 +56,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double errorVelocity(double rps)
   {
-    double result = rps / 10;
-    return result * 1.5;
+    return rps + (rps * .15);
   }
 
   public void setShooterVelocity(double targetRPS) {
-    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS+errorVelocity(targetRPS)));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-(targetRPS+errorVelocity(targetRPS))));
+    shooterMotor1.setControl(velocityRequest.withVelocity(errorVelocity(targetRPS)));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-(errorVelocity(targetRPS))));
   }
 
   public double getShooterVelocity() {
@@ -85,11 +72,13 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterMotor2.getVelocity().getValueAsDouble();
   }
 
+  // Goal: Shoot a min dist of 6feet (1.8288m) to max dist of 12 feet (3.6576m)
   public void shooterShoot(){
     if(camera.cameraVisable())
     {
-     double motorRPS = shooterCalcvV2.getRPSForDistance(camera.getX());
-     setShooterVelocity(motorRPS);
+    //  double motorRPS = shooterCalcvV2.getRPSForDistance(camera.getX());
+    //  setShooterVelocity(motorRPS);)
+    setShooterVelocity(shooterCalcV3.shooterRPS0(camera.getX()));
     }
   }
 
@@ -102,7 +91,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-     SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
+    SmartDashboard.putNumber("Initial RPS", shooterCalcV3.shooterRPS0(camera.getX()));
+    //  SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
     //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
   }
 }
