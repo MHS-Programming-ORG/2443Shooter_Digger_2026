@@ -15,16 +15,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private static final double[] shooterPIDVals = {0.66, 0, 0};
-  private ShooterCalcV3 shooterCalcV3;
-  private ShooterCalcV2 shooterCalcvV2;
+  private ShooterCalc shooterCalcV3;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, shooterguide;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort,
   double shooterToGearRatio) {
-    shooterCalcvV2 = new ShooterCalcV2();
-    shooterCalcV3 = new ShooterCalcV3();
+    shooterCalcV3 = new ShooterCalc();
     this.camera = camera;
 
     shooterMotor1 = new TalonFX(shooterPort1);
@@ -74,12 +72,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // Goal: Shoot a min dist of 6feet (1.8288m) to max dist of 12 feet (3.6576m)
   public void shooterShoot(){
-    if(camera.cameraVisable())
-    {
-    //  double motorRPS = shooterCalcvV2.getRPSForDistance(camera.getX());
-    //  setShooterVelocity(motorRPS);)
-    setShooterVelocity(shooterCalcV3.shooterRPS0(camera.getX()));
-    }
+  //  if(camera.cameraVisable())
+    //{
+    System.out.println("df");
+    SmartDashboard.putNumber("VEL", shooterCalcV3.calculateMotorRPS(camera.getX()));
+    //setShooterVelocity(shooterCalcV3.calculateLaunchVelocity(3));
+    //}
   }
 
   @Override
@@ -91,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("Initial RPS", shooterCalcV3.shooterRPS0(camera.getX()));
+    SmartDashboard.putNumber("Initial RPS", shooterCalcV3.calculateLaunchVelocity(camera.getX()));
     //  SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
     //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
   }

@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.shoooterSubsystems;
 
 public class ShooterCalc {
@@ -6,9 +10,9 @@ public class ShooterCalc {
     private final double INCH_TO_METER = 0.0254;
 
     // change these the height is right im pretty sure
-    private final double angleDegree = 50.0;
-    private final double shooterHeightOffset = 0 * INCH_TO_METER;
-    private final double hubHeight = 0 * INCH_TO_METER;
+    private final double angleDegree = 30.0;
+    private final double shooterHeightOffset = 20 * INCH_TO_METER;
+    private final double hubHeight = 72 * INCH_TO_METER;
 
     private final double wheelRadiusMeters = 2.25 * INCH_TO_METER;
     private final double gearRatio = 1.0; // motor : wheel
@@ -19,11 +23,6 @@ public class ShooterCalc {
 
         double numerator = G * Math.pow(distanceMeters, 2);
         double denominator = 2 * Math.pow(Math.cos(theta), 2) * (distanceMeters * Math.tan(theta) - heightDifference);
-
-        if (denominator <= 0) {
-            throw new IllegalArgumentException("Target out of range for the given shooter angle and height difference.");
-        }
-
         return Math.sqrt(numerator / denominator);
     }
 
@@ -32,6 +31,5 @@ public class ShooterCalc {
         double wheelRPS = launchVelocity / (2 * Math.PI * wheelRadiusMeters);
 
         return wheelRPS * gearRatio;
-    }
+  }
 }
-
