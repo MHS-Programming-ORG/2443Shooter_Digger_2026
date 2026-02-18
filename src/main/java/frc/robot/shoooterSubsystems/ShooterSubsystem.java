@@ -15,6 +15,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private static final double[] shooterPIDVals = {0.66, 0, 0};
+  private double sVelocity = 70;
+  private ShooterVelocityRanges shootVelR;
   private ShooterCalc shooterCalcV3;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, shooterguide;
@@ -72,12 +74,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // Goal: Shoot a min dist of 6feet (1.8288m) to max dist of 12 feet (3.6576m)
   public void shooterShoot(){
-  //  if(camera.cameraVisable())
-    //{
-    System.out.println("df");
-    SmartDashboard.putNumber("VEL", shooterCalcV3.calculateMotorRPS(camera.getX()));
-    //setShooterVelocity(shooterCalcV3.calculateLaunchVelocity(3));
-    //}
+  // if(camera.cameraVisable())
+  // {
+  // System.out.println("df");
+  // SmartDashboard.putNumber("VEL", shooterCalcV3.calculateMotorRPS(camera.getX()));
+  // setShooterVelocity(shooterCalcV3.calculateLaunchVelocity(3));
+  // }
+  if(camera.cameraVisable()){
+    sVelocity = shootVelR.returnVelocity(camera.getX());
+  }
+  setShooterVelocity(sVelocity);
   }
 
   @Override
