@@ -12,7 +12,7 @@ public class ShooterCalc {
     // change these the height is right im pretty sure
     private final double angleDegree = 30.0;
     private final double shooterHeightOffset = 20 * INCH_TO_METER;
-    private final double hubHeight = 72 * INCH_TO_METER;
+    private final double hubHeight = 72 * INCH_TO_METER; //The 2.75 is like a spacer so hopeuflly above lip idk
 
     private final double wheelRadiusMeters = 2.25 * INCH_TO_METER;
     private final double gearRatio = 1.0; // motor : wheel
@@ -27,9 +27,7 @@ public class ShooterCalc {
     }
 
     public double calculateMotorRPS(double distanceMeters) {
-        double launchVelocity = calculateLaunchVelocity(distanceMeters);
-        double wheelRPS = launchVelocity / (2 * Math.PI * wheelRadiusMeters);
-
-        return wheelRPS * gearRatio;
+        double launchVelocity = calculateLaunchVelocity(distanceMeters + (13.314522 * INCH_TO_METER));
+        return (launchVelocity / (2 * Math.PI * wheelRadiusMeters)) * gearRatio;
   }
 }
