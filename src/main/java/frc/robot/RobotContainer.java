@@ -23,9 +23,10 @@ public class RobotContainer {
 
   // Create the command object
   private final RossShootCommand rossShootCmd = new RossShootCommand(
-    shooterSub,
-    conveyorSub
-  )
+    shooterSub,  // Input the ShooterSubsystem object
+    conveyorSub,  // Input the ConveyorSubsystem object
+	 1.0           // Input the delay between when the shooter and the kicker starts
+  );
 
   public RobotContainer() {
     configureBindings();

@@ -9,8 +9,15 @@ public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
   private Timer timer;
+  private static final double defaultKickerDelay = 2.0;
+  private double kickerDelay;
 
   public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub ) {
+	 // Call the other constructor and use the "defaultKickerDelay" as the kicker delay
+    this(shooterSub, conveyorSub, defaultKickerDelay);
+  }
+
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay ) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -18,6 +25,7 @@ public class RossShootCommand extends Command {
     addRequirements(conveyorSub);
 
     this.timer = new Timer();
+    this.kickerDelay = kickerDelay;
   }
 
   @Override
@@ -34,7 +42,7 @@ public class RossShootCommand extends Command {
     // command is running.
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
-    if (timer.get() > 2.0) {
+    if (timer.get() > kickerDelay) {
       shooterSub.setShooterGuideSpeed(45);
       conveyorSub.setConveyorSpeed(0.4);
     }
@@ -47,6 +55,7 @@ public class RossShootCommand extends Command {
     shooterSub.stopShooterMotors();
     shooterSub.setShooterGuideSpeed(0.0);
     conveyorSub.setConveyorSpeed(0.0);
+    timer.stop();
   }
 
   @Override
