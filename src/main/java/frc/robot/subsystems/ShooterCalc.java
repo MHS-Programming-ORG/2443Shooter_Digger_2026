@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.shoooterSubsystems;
+package frc.robot.subsystems;
 
 public class ShooterCalc {
 
@@ -27,7 +27,8 @@ public class ShooterCalc {
     }
 
     public double calculateMotorRPS(double distanceMeters) {
-        double launchVelocity = calculateLaunchVelocity(distanceMeters + (13.314522 * INCH_TO_METER));
+        //  + (13.314522 * INCH_TO_METER)
+        double launchVelocity = calculateLaunchVelocity(distanceMeters);
         return (launchVelocity / (2 * Math.PI * wheelRadiusMeters)) * gearRatio;
   }
 }

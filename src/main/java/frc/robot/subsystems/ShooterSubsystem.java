@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.shoooterSubsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -33,8 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     var config = new TalonFXConfiguration();
     config.Slot0.kP = shooterPIDVals[0];
-    config.Slot0.kI = shooterPIDVals[1];
-    config.Slot0.kD = shooterPIDVals[2];
+    config.Slot0.kS = shooterPIDVals[1];
+    config.Slot0.kV = shooterPIDVals[2];
     config.Feedback.SensorToMechanismRatio = shooterToGearRatio;
     
     shooterMotor1.getConfigurator().apply(config);
@@ -73,6 +73,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // Goal: Shoot a min dist of 6feet (1.8288m) to max dist of 12 feet (3.6576m)
+  // Kicker Vel > Shooter Vel == Higher Y
+  // Kicker Vel < Shooter Vel == Lower Y
+  // Kicker Vel = Shooter Vel == Equal Y
   public void shooterShoot(){
     if(camera.cameraVisable()){
       System.out.println("df");
