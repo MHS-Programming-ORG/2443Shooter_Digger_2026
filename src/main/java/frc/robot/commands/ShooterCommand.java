@@ -12,7 +12,7 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
-    shooterSub.setShooterVelocity(90); // half of the value here is outputted
+    shooterSub.setShooterVelocity(45); // half of the value here is outputted
   }
 
   @Override

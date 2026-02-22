@@ -7,14 +7,17 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 
 public class ShooterSubsystem extends SubsystemBase {
+  // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterPIDVals = {0.66, 0, 0};
+  private static final double[] shooterPIDVals = {0.85, 0.1904296875, 0.07};
   private double sVelocity = 50;
   private ShooterVelocityRanges shootVelR;
   private ShooterCalc shooterCalcV3;
@@ -22,8 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX shooterMotor1, shooterMotor2, shooterguide;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
-  public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort,
-  double shooterToGearRatio) {
+  public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort) {
     shooterCalcV3 = new ShooterCalc();
     this.camera = camera;
 
@@ -35,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
     config.Slot0.kP = shooterPIDVals[0];
     config.Slot0.kS = shooterPIDVals[1];
     config.Slot0.kV = shooterPIDVals[2];
-    config.Feedback.SensorToMechanismRatio = shooterToGearRatio;
+    config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
     
     shooterMotor1.getConfigurator().apply(config);
     shooterMotor2.getConfigurator().apply(config);
@@ -46,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterGuideSpeed(double speed){
-    shooterguide.setControl(new VelocityVoltage(speed));
+    shooterguide.setControl(velocityRequest.withVelocity(speed));
   }
 
   public void stopShooterMotors(){
@@ -54,14 +56,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor2.set(0);
   }
 
-  public double errorVelocity(double rps)
-  {
-    return rps + (rps * .15);
-  }
-
   public void setShooterVelocity(double targetRPS) {
-    shooterMotor1.setControl(velocityRequest.withVelocity(errorVelocity(targetRPS)));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-(errorVelocity(targetRPS))));
+    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS));
   }
 
   public double getShooterVelocity() {

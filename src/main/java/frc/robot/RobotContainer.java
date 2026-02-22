@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public class RobotContainer {
   private final ArduCam camera = new ArduCam();
   // ShooterSubsytem Parameters: shooter side ArduCam, LeftShooterPort, RightShooterPort, KickerPort, ShooterGearRatio
-  private final ShooterSubsystem shooterSub = new ShooterSubsystem(camera, 2, 4, 3, 48/50);
+  private final ShooterSubsystem shooterSub = new ShooterSubsystem(camera, 15, 16, 17);
   private final ShooterCommand shooterCmd = new ShooterCommand(shooterSub);
   private final CommandJoystick stick = new CommandJoystick(1);
   private final CommandXboxController xbox = new CommandXboxController(0);
@@ -25,9 +25,11 @@ public class RobotContainer {
   private void configureBindings() {
     xbox.x().onTrue(shooterCmd);
     xbox.y().onTrue(new StopShooter(shooterSub));
-    xbox.rightBumper().whileTrue(new KickerCommand(shooterSub));
-    xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
-    xbox.a().onTrue(new InstantCommand(() -> new ConveyorSubsystem(0).setConveyorSpeed(0.7)));
+    xbox.rightBumper().onTrue(new KickerCommand(shooterSub));
+    xbox.leftBumper().onTrue(new InstantCommand (() -> shooterSub.setShooterGuideSpeed(0)));
+    // xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
+    xbox.a().whileTrue(new InstantCommand(() -> new ConveyorSubsystem(18).setConveyorSpeed(0.4)));
+    xbox.a().whileFalse(new InstantCommand(() -> new ConveyorSubsystem(18).setConveyorSpeed(0)));
     //xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
 
   }

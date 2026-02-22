@@ -21,7 +21,7 @@ public class KickerCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSub.setShooterGuideSpeed(70);
+    shooterSub.setShooterGuideSpeed(45);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,12 +31,11 @@ public class KickerCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSub.setShooterGuideSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return new CommandXboxController(0).rightBumper().getAsBoolean();
+    return false;
   }
 }
