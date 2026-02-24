@@ -1,0 +1,59 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ConveyorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
+
+public class RossShootCommand extends Command {
+  private ShooterSubsystem shooterSub;
+  private ConveyorSubsystem conveyorSub;
+  private double kickerDelay;
+  private Timer timer;
+
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay ) {
+    this.shooterSub = shooterSub;
+    addRequirements(shooterSub);
+
+    this.conveyorSub = conveyorSub;
+    addRequirements(conveyorSub);
+
+    this.timer = new Timer();
+    this.kickerDelay = kickerDelay;
+  }
+
+  @Override
+  public void initialize() {
+    timer.restart(); // Reset the timer
+
+    // Run the shooter to let it spin up
+    shooterSub.setShooterVelocity(65);
+    shooterSub.setKickerVelocity(70);
+  }
+
+  @Override
+  public void execute() {
+    // This function runs in a loop so it's called over and over again while the
+    // command is running.
+    // Check to see that some amount of time has passed since the command
+    // has started.  At that point, start the conveyor and kicker
+    if (timer.get() > kickerDelay) {
+      conveyorSub.setConveyorSpeed(0.4);
+    }
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // Stop all motors since the command has ended.
+    // This should still be called if the command in cancelled
+    shooterSub.stopShooterMotors();
+    shooterSub.setKickerVelocity(0.0);
+    conveyorSub.setConveyorSpeed(0.0);
+    timer.stop();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;  // This means run the command forever until we cancel the command
+  }
+}

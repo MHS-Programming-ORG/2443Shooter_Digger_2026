@@ -17,12 +17,13 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterPIDVals = {0.85, 0.1904296875, 0.07};
+  private static final double[] shooterConfigVals = {0.85, 0.1904296875, 0.07};
+  private static final double[] kickerConfigVals = {0.7, 0.4501953125, 0.06499999761581421};
   private double sVelocity = 50;
   private ShooterVelocityRanges shootVelR;
   private ShooterCalc shooterCalcV3;
   private ArduCam camera = new ArduCam();
-  private TalonFX shooterMotor1, shooterMotor2, shooterguide;
+  private TalonFX shooterMotor1, shooterMotor2, kicker;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort) {
@@ -31,24 +32,31 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotor1 = new TalonFX(shooterPort1);
     shooterMotor2 = new TalonFX(shooterPort2);
-    shooterguide = new TalonFX(kickerPort);
+    kicker = new TalonFX(kickerPort);
 
-    var config = new TalonFXConfiguration();
-    config.Slot0.kP = shooterPIDVals[0];
-    config.Slot0.kS = shooterPIDVals[1];
-    config.Slot0.kV = shooterPIDVals[2];
-    config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
+    var shooterConfig = new TalonFXConfiguration();
+    shooterConfig.Slot0.kP = shooterConfigVals[0];
+    shooterConfig.Slot0.kS = shooterConfigVals[1];
+    shooterConfig.Slot0.kV = shooterConfigVals[2];
+    shooterConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
+
+    var kickerConfig = new TalonFXConfiguration();
+    kickerConfig.Slot0.kP = kickerConfigVals[0];
+    kickerConfig.Slot0.kS = kickerConfigVals[1];
+    kickerConfig.Slot0.kV = kickerConfigVals[2];
+    kickerConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
     
-    shooterMotor1.getConfigurator().apply(config);
-    shooterMotor2.getConfigurator().apply(config);
+    shooterMotor1.getConfigurator().apply(shooterConfig);
+    shooterMotor2.getConfigurator().apply(shooterConfig);
+    kicker.getConfigurator().apply(kickerConfig);
 
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
-    shooterguide.setNeutralMode(NeutralModeValue.Coast);
+    kicker.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public void setShooterGuideSpeed(double speed){
-    shooterguide.setControl(velocityRequest.withVelocity(speed));
+  public void setKickerVelocity(double speedRPS){
+    kicker.setControl(velocityRequest.withVelocity(speedRPS));
   }
 
   public void stopShooterMotors(){
@@ -79,10 +87,6 @@ public class ShooterSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("RPS", shooterCalcV3.calculateMotorRPS(camera.getX()));
       setShooterVelocity(shooterCalcV3.calculateMotorRPS(camera.getX()));
     }
-  // if(camera.cameraVisable()){
-  //   sVelocity = shootVelR.returnVelocity(camera.getX());
-  // }
-  // setShooterVelocity(sVelocity);
   }
 
   @Override
@@ -90,6 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // add speed limit here
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
+    SmartDashboard.putNumber("[Shooter] Kicker", kicker.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("ArduCam", camera.getX());
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
