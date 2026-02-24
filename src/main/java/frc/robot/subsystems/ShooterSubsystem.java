@@ -18,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
   private static final double[] shooterConfigVals = {0.85, 0.1904296875, 0.07};
-  private static final double[] kickerConfigVals = {0.7, 0.4501953125, 0.06499999761581421};
+  private static final double[] kickerConfigVals = {0, 0.4501953125, 0.06499999761581421};
   private double sVelocity = 50;
   private ShooterVelocityRanges shootVelR;
   private ShooterCalc shooterCalcV3;
@@ -94,6 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // add speed limit here
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
+    SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kicker.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("ArduCam", camera.getX());
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());

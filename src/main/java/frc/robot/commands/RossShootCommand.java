@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj.Timer;
 public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
-  private double kickerDelay;
+  private double kickerDelay, kickerVel, shooterVel, conveyorVel;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay ) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double shooterVel, double kickerVel, double conveyorVel) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -20,6 +20,9 @@ public class RossShootCommand extends Command {
 
     this.timer = new Timer();
     this.kickerDelay = kickerDelay;
+    this.kickerVel = kickerVel;
+    this.shooterVel = shooterVel;
+    this.conveyorVel = conveyorVel;
   }
 
   @Override
@@ -27,8 +30,8 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    shooterSub.setShooterVelocity(65);
-    shooterSub.setKickerVelocity(70);
+    shooterSub.setShooterVelocity(shooterVel);
+    shooterSub.setKickerVelocity(kickerVel);
   }
 
   @Override
@@ -38,7 +41,7 @@ public class RossShootCommand extends Command {
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
     if (timer.get() > kickerDelay) {
-      conveyorSub.setConveyorSpeed(0.4);
+      conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }
 
