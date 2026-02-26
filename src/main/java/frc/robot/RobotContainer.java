@@ -30,10 +30,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    //xbox.x().onTrue(shooterCmd);
-    //xbox.y().onTrue(new StopShooter(shooterSub));
-    // xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
-
     xbox.x().whileTrue( rossShootCmd );
   }
 

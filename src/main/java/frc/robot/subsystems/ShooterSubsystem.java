@@ -20,7 +20,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final double[] shooterConfigVals = {0.85, 0.1904296875, 0.07};
   private static final double[] kickerConfigVals = {0, 0.4501953125, 0.06499999761581421};
   private double sVelocity = 50;
-  private ShooterVelocityRanges shootVelR;
   private ShooterCalc shooterCalcV3;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, kicker;
@@ -92,6 +91,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // add speed limit here
+    SmartDashboard.putBoolean("Camera Visable", camera.cameraVisable());
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
@@ -100,7 +100,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("Initial RPS", shooterCalcV3.calculateLaunchVelocity(camera.getX()));
     //  SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
     //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
   }

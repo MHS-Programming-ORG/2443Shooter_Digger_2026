@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //http://photonvision.local:5800/#/dashboard
-
-// BROKEN
 public class ArduCam extends SubsystemBase{
-    private PhotonCamera camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
+    private PhotonCamera camera = new PhotonCamera("BlueSaber1");
     private PhotonPipelineResult result = camera.getLatestResult();
 
     public boolean cameraVisable(){
