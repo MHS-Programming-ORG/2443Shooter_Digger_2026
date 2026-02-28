@@ -56,23 +56,27 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterNKickerIdle(double shooter, double kicker){
-    shooterMotor1.setControl(velocityRequest.withVelocity(shooter));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-shooter));
-    kickerMotor.setControl(velocityRequest.withVelocity(kicker));
+    shooterMotor1.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-shooter).withSlot(1));
+    kickerMotor.setControl(velocityRequest.withVelocity(kicker).withSlot(1));
   }
 
   public void setKickerVelocity(double speedRPS){
-    kickerMotor.setControl(velocityRequest.withVelocity(speedRPS));
+    kickerMotor.setControl(velocityRequest.withVelocity(speedRPS).withSlot(0));
   }
 
   public void stopShooterMotors(){
-    shooterMotor1.set(0);
-    shooterMotor2.set(0);
+    shooterMotor1.stopMotor();
+    shooterMotor2.stopMotor();
+  }
+
+  public void stopKickerMotor(){
+    kickerMotor.stopMotor();
   }
 
   public void setShooterVelocity(double targetRPS) {
-    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS));
+    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS).withSlot(0));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS).withSlot(0));
   }
 
   public double getShooterVelocity() {

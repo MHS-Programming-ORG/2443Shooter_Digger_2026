@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ArduCam;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -49,6 +48,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.getShooterSubsystem().stopShooterMotors();
+    m_robotContainer.getShooterSubsystem().stopKickerMotor();
   }
 
   @Override
@@ -58,6 +58,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_robotContainer.getShooterSubsystem().stopShooterMotors();
+    m_robotContainer.getShooterSubsystem().stopKickerMotor();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -75,7 +77,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.getShooterSubsystem().setShooterNKickerIdle(10, 10);
+    // m_robotContainer.getShooterSubsystem().setShooterNKickerIdle(10, 10);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
