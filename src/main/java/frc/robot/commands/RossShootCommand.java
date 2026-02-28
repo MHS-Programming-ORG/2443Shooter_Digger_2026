@@ -49,8 +49,7 @@ public class RossShootCommand extends Command {
   public void end(boolean interrupted) {
     // Stop all motors since the command has ended.
     // This should still be called if the command in cancelled
-    // shooterSub.stopShooterMotors();
-    // shooterSub.setKickerVelocity(0.0);
+    shooterSub.setShooterNKickerIdle(20, 20);
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
   }

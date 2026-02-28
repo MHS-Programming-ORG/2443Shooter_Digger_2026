@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -22,7 +21,7 @@ public class RobotContainer {
   // Create the command object
   //RossShootCommand Parameter: Shooter Sub, conveyor sub, kicker delay(seconds), Kicker velocity(RPS), Shooter Velocity(RPS), Conveyor Velocity(%)
   private final RossShootCommand rossShootCmd = new RossShootCommand(shooterSub, conveyorSub, 
-  1.5, 70, 65, 0.4);
+  1.5, 50, 50, 0.4);
 
   public RobotContainer() {
 
@@ -32,6 +31,10 @@ public class RobotContainer {
   private void configureBindings() {
     xbox.x().whileTrue( rossShootCmd );
     xbox.x().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
+  }
+
+  public ShooterSubsystem getShooterSubsystem(){
+    return new ShooterSubsystem(camera, 15, 16, 17);
   }
 
   public Command getAutonomousCommand() {

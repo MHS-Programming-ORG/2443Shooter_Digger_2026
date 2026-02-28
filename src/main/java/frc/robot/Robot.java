@@ -18,8 +18,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final ArduCam camera = new ArduCam();
-  private final frc.robot.subsystems.ShooterSubsystem shooterSubsystem = new frc.robot.subsystems.ShooterSubsystem(camera, 15, 16, 17);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -50,7 +48,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    shooterSubsystem.stopShooterMotors();
+    m_robotContainer.getShooterSubsystem().stopShooterMotors();
   }
 
   @Override
@@ -77,7 +75,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    shooterSubsystem.setShooterNKickerIdle(20, 20);
+    m_robotContainer.getShooterSubsystem().setShooterNKickerIdle(10, 10);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
