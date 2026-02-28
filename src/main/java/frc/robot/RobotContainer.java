@@ -31,6 +31,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     xbox.x().whileTrue( rossShootCmd );
+    xbox.x().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
   }
 
   public Command getAutonomousCommand() {

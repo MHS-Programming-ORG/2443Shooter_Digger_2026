@@ -7,15 +7,7 @@ public class ShooterCalcV2 {
     private final double INCH_TO_METER = 0.0254;
     private final double[][] shooterData = {
         {50, 88 * INCH_TO_METER},
-        {50, 136 * INCH_TO_METER},
-        {50, 3.1},
-        {50, 4.3},
-        {50, 5.6},
-        {60, 6.8},
-        {70, 8.0},
-        {80, 9.1},
-        {90, 10.0},
-        {100, 10.8}
+        {50, 136 * INCH_TO_METER}
     };
 
     public double getRPSForDistance(double targetDistanceMeters) {

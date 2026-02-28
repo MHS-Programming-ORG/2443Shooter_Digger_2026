@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
@@ -22,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double sVelocity = 50;
   private ShooterCalc shooterCalcV3;
   private ArduCam camera = new ArduCam();
-  private TalonFX shooterMotor1, shooterMotor2, kicker;
+  private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort) {
@@ -31,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotor1 = new TalonFX(shooterPort1);
     shooterMotor2 = new TalonFX(shooterPort2);
-    kicker = new TalonFX(kickerPort);
+    kickerMotor = new TalonFX(kickerPort);
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.Slot0.kP = shooterConfigVals[0];
@@ -47,15 +48,21 @@ public class ShooterSubsystem extends SubsystemBase {
     
     shooterMotor1.getConfigurator().apply(shooterConfig);
     shooterMotor2.getConfigurator().apply(shooterConfig);
-    kicker.getConfigurator().apply(kickerConfig);
+    kickerMotor.getConfigurator().apply(kickerConfig);
 
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
-    kicker.setNeutralMode(NeutralModeValue.Coast);
+    kickerMotor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public void setShooterNKickerIdle(double shooter, double kicker){
+    shooterMotor1.setControl(velocityRequest.withVelocity(shooter));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-shooter));
+    kickerMotor.setControl(velocityRequest.withVelocity(kicker));
   }
 
   public void setKickerVelocity(double speedRPS){
-    kicker.setControl(velocityRequest.withVelocity(speedRPS));
+    kickerMotor.setControl(velocityRequest.withVelocity(speedRPS));
   }
 
   public void stopShooterMotors(){
@@ -84,7 +91,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if(camera.cameraVisable()){
       System.out.println("df");
       SmartDashboard.putNumber("RPS", shooterCalcV3.calculateMotorRPS(camera.getX()));
-      setShooterVelocity(shooterCalcV3.calculateMotorRPS(camera.getX()));
+      // setShooterVelocity(shooterCalcV3.calculateMotorRPS(camera.getX()));
     }
   }
 
@@ -95,7 +102,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("[Shooter] Kicker", kicker.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("ArduCam", camera.getX());
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());

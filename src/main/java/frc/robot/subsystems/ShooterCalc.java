@@ -12,12 +12,12 @@ public class ShooterCalc {
     private final double INCH_TO_METER = 0.0254;
 
     // change these the height is right im pretty sure
-    private final double angleDegree = 30.0;
     private final double shooterHeightOffset = 20 * INCH_TO_METER;
     private final double hubHeight = 72 * INCH_TO_METER; //The 2.75 is like a spacer so hopeuflly above lip idk
 
     private final double wheelRadiusMeters = 2 * INCH_TO_METER;
     private final double gearRatio = 1.0; // motor : wheel
+    private final double angleDegree = 55.0;
 
     public double calculateLaunchVelocity(double distanceMeters) {
         double theta = Math.toRadians(angleDegree);
