@@ -17,7 +17,7 @@ public class ShooterCalc {
 
     private final double wheelRadiusMeters = 2 * INCH_TO_METER;
     private final double gearRatio = 1.0; // motor : wheel
-    private final double angleDegree = 55.0;
+    private final double angleDegree = 60.0;
 
     public double calculateLaunchVelocity(double distanceMeters) {
         double theta = Math.toRadians(angleDegree);
@@ -25,14 +25,12 @@ public class ShooterCalc {
 
         double numerator = G * Math.pow(distanceMeters, 2);
         double denominator = 2 * Math.pow(Math.cos(theta), 2) * (distanceMeters * Math.tan(theta) - heightDifference);
-        SmartDashboard.putNumber("ssdsd", (numerator / denominator));
         return Math.sqrt(numerator / denominator);
     }
 
     public double calculateMotorRPS(double distanceMeters) {
         //  + (13.314522 * INCH_TO_METER)
         double launchVelocity = calculateLaunchVelocity(distanceMeters);
-        SmartDashboard.putNumber("launch vel", launchVelocity);
         return ((launchVelocity / (2 * Math.PI * wheelRadiusMeters))) * gearRatio;
     }
 }

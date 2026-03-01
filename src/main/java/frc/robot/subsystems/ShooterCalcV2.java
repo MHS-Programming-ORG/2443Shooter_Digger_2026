@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
 public class ShooterCalcV2 {
     private final double INCH_TO_METER = 0.0254;
     private final double[][] shooterData = {
-        {50, 88 * INCH_TO_METER},
-        {50, 136 * INCH_TO_METER}
+        {50, 88},
+        {50, 136},
+        {70, 165}
     };
 
     public double getRPSForDistance(double targetDistanceMeters) {

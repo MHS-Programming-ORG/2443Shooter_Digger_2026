@@ -21,7 +21,7 @@ public class RobotContainer {
   // Create the command object
   //RossShootCommand Parameter: Shooter Sub, conveyor sub, kicker delay(seconds), Kicker velocity(RPS), Shooter Velocity(RPS), Conveyor Velocity(%)
   private final RossShootCommand rossShootCmd = new RossShootCommand(shooterSub, conveyorSub, 
-  1.5, 50, 50, 0.4);
+  1.5, 45, 45, 0.4);
 
   public RobotContainer() {
 
@@ -30,7 +30,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     xbox.x().whileTrue( rossShootCmd );
-    xbox.x().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
+    // xbox.x().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
   }
 
   public ShooterSubsystem getShooterSubsystem(){

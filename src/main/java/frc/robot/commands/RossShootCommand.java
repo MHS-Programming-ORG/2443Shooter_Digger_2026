@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 
 public class RossShootCommand extends Command {
@@ -40,7 +41,8 @@ public class RossShootCommand extends Command {
     // command is running.
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
-    if (timer.get() > kickerDelay) {
+    //MathUtil.isNear(shooterVel, shooterSub.getShooterVelocity(), 6)
+    if (timer.get() >= kickerDelay) {
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }
@@ -49,7 +51,9 @@ public class RossShootCommand extends Command {
   public void end(boolean interrupted) {
     // Stop all motors since the command has ended.
     // This should still be called if the command in cancelled
-    shooterSub.setShooterNKickerIdle(20, 20);
+    shooterSub.stopKickerMotor();
+    shooterSub.stopShooterMotors();
+    // shooterSub.setShooterNKickerIdle(20, 20);
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
   }
