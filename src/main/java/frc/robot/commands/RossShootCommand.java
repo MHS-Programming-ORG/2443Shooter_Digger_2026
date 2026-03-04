@@ -31,7 +31,8 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    shooterSub.setShooterVelocity(shooterVel);
+    //shooterSub.setShooterVelocity(shooterVel);
+    shooterSub.shooterShoot();
     shooterSub.setKickerVelocity(kickerVel);
   }
 

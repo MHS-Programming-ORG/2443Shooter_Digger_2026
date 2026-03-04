@@ -20,13 +20,15 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private static final double[] shooterConfigVals = {0.5, 0.1904296875, 0.07};
   private static final double[] kickerConfigVals = {0, 0.4501953125, 0.06499999761581421};
-  private ShooterCalc shooterCalcV3;
+  private ShooterCalc shooterCalc;
+  private ShooterCalcV2 shooterCalcV2;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort) {
-    shooterCalcV3 = new ShooterCalc();
+    shooterCalc = new ShooterCalc();
+    shooterCalcV2 = new ShooterCalcV2();
     this.camera = camera;
 
     shooterMotor1 = new TalonFX(shooterPort1);
@@ -98,8 +100,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shooterShoot(){
     if(camera.cameraVisable()){
       // System.out.println("df");
-      // SmartDashboard.putNumber("RPS", shooterCalcV3.calculateMotorRPS(camera.getX()));
-      setShooterVelocity(shooterCalcV3.calculateMotorRPS(70*0.0254));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX()));
+      //setShooterVelocity(shooterCalc.calculateMotorRPS(70*0.0254));
     }
   }
 
@@ -115,9 +117,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    
-    SmartDashboard.putNumber("Output", shooterCalcV3.calculateMotorRPS(70*0.0254));
-    SmartDashboard.putNumber("Velocity", shooterCalcV3.calculateLaunchVelocity(70*0.0254));
+    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX()));
+    SmartDashboard.putNumber("Output", shooterCalc.calculateMotorRPS(70*0.0254));
+    SmartDashboard.putNumber("Velocity", shooterCalc.calculateLaunchVelocity(70*0.0254));
     //  SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
     //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
   }
