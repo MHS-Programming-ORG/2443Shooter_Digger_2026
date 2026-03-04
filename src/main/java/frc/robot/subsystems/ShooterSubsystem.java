@@ -11,6 +11,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
@@ -18,20 +20,26 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterConfigVals = {0.5, 0.1904296875, 0.07};
-  private static final double[] kickerConfigVals = {0, 0.4501953125, 0.06499999761581421};
-  private ShooterCalc shooterCalcV3;
+  private static final double[] shooterConfigVals = {0.66, 0.1904296875, 0.07};
+  private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
+  private ShooterCalcV2 shooterCalcV2;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
 
   public ShooterSubsystem(ArduCam camera, int shooterPort1, int shooterPort2, int kickerPort) {
-    shooterCalcV3 = new ShooterCalc();
+    shooterCalcV2 = new ShooterCalcV2();
     this.camera = camera;
 
     shooterMotor1 = new TalonFX(shooterPort1);
     shooterMotor2 = new TalonFX(shooterPort2);
     kickerMotor = new TalonFX(kickerPort);
+
+    var sLimitsConfig = new CurrentLimitsConfigs();
+    sLimitsConfig.StatorCurrentLimit = 30;
+    sLimitsConfig.SupplyCurrentLimit = 20;
+    sLimitsConfig.SupplyCurrentLimitEnable = true;
+    sLimitsConfig.StatorCurrentLimitEnable = true;
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.Slot0.kP = shooterConfigVals[0];
@@ -46,8 +54,11 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
     
     shooterMotor1.getConfigurator().apply(shooterConfig);
+    shooterMotor1.getConfigurator().apply(sLimitsConfig);
     shooterMotor2.getConfigurator().apply(shooterConfig);
+    shooterMotor2.getConfigurator().apply(sLimitsConfig);
     kickerMotor.getConfigurator().apply(kickerConfig);
+    kickerMotor.getConfigurator().apply(sLimitsConfig);
 
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
@@ -58,9 +69,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor1.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
     shooterMotor2.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
     kickerMotor.setControl(velocityRequest.withVelocity(kicker).withSlot(1));
-    if(shooterMotor1.getVelocity().getValueAsDouble() <= 20){
+    if(shooterMotor1.getVelocity().getValueAsDouble() <= (shooter/100)){
       shooterMotor1.set(shooter/100);
-      shooterMotor2.set(shooter/100);
+      shooterMotor2.set(-(shooter/100));
       kickerMotor.set(kicker/100);
     }
   }
@@ -96,11 +107,9 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
   public void shooterShoot(){
-    if(camera.cameraVisable()){
-      // System.out.println("df");
-      // SmartDashboard.putNumber("RPS", shooterCalcV3.calculateMotorRPS(camera.getX()));
-      setShooterVelocity(shooterCalcV3.calculateMotorRPS(70*0.0254));
-    }
+    //if(){
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX()));
+    //}
   }
 
   @Override
@@ -115,10 +124,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    
-    SmartDashboard.putNumber("Output", shooterCalcV3.calculateMotorRPS(70*0.0254));
-    SmartDashboard.putNumber("Velocity", shooterCalcV3.calculateLaunchVelocity(70*0.0254));
-    //  SmartDashboard.putNumber("Calculation RPS", shooterCalcvV2.getRPSForDistance(camera.getX()));
-    //SmartDashboard.putNumber("[Shooter] Calculated DutyCycleOut", (convertDist_Vel() / (2*Math.PI*ShooterConstants.SHOOTER_MOTORWHEEL_RADIUS)) / 100);
+    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX()));
   }
 }

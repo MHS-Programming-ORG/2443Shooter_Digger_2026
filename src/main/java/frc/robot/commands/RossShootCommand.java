@@ -31,7 +31,8 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    shooterSub.setShooterVelocity(shooterVel);
+    // shooterSub.setShooterVelocity(shooterVel);
+    shooterSub.shooterShoot();
     shooterSub.setKickerVelocity(kickerVel);
   }
 
@@ -53,7 +54,6 @@ public class RossShootCommand extends Command {
     // This should still be called if the command in cancelled
     shooterSub.stopKickerMotor();
     shooterSub.stopShooterMotors();
-    // shooterSub.setShooterNKickerIdle(20, 20);
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
   }
