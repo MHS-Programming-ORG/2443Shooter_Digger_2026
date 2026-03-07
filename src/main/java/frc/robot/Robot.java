@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CameraServerJNI;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -11,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
- * this project, you must also update the Main.java file in the project.
+ * this project, you must also update the Main.java file in the project.sws
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -25,6 +30,8 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    CameraServer.startAutomaticCapture();
+    CameraServerJNI.setSourceResolution(0, 1920, 1080);
     m_robotContainer = new RobotContainer();
   }
 
