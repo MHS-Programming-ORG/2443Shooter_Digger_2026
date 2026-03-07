@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
@@ -20,6 +19,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
+  private static double xDistance = 0;
   private static final double[] shooterConfigVals = {0.66, 0.1904296875, 0.07};
   private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
   private ShooterCalcV2 shooterCalcV2;
@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerMotor = new TalonFX(kickerPort);
 
     var sLimitsConfig = new CurrentLimitsConfigs();
-    sLimitsConfig.StatorCurrentLimit = 30;
+    sLimitsConfig.StatorCurrentLimit = 20;
     sLimitsConfig.SupplyCurrentLimit = 20;
     sLimitsConfig.SupplyCurrentLimitEnable = true;
     sLimitsConfig.StatorCurrentLimitEnable = true;
@@ -63,6 +63,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
     kickerMotor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public static void setXDist(double newXDist){
+    xDistance = newXDist;
   }
 
   public void setShooterNKickerIdle(double shooter, double kicker){
@@ -104,9 +108,9 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(double xDist){
+  public void shooterShoot(){
     //if(){
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(xDist));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(xDistance));
     //}
   }
 
@@ -126,6 +130,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX()));
+    SmartDashboard.putNumber("RPS", getShooterShoot());
   }
 }
