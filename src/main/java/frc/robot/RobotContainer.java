@@ -21,7 +21,7 @@ public class RobotContainer {
   // Create the command object
   //RossShootCommand Parameter: Shooter Sub, conveyor sub, kicker delay(seconds), Kicker velocity(RPS), Shooter Velocity(RPS), Conveyor Velocity(%)
   private final RossShootCommand rossShootCmd = new RossShootCommand(shooterSub, conveyorSub, 
-  2, 55, 50, 0.4);
+  2, camera.getX(), 50, 0.4);
 
   public RobotContainer() {
 

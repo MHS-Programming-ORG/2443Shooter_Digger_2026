@@ -69,11 +69,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor1.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
     shooterMotor2.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
     kickerMotor.setControl(velocityRequest.withVelocity(kicker).withSlot(1));
-    if(shooterMotor1.getVelocity().getValueAsDouble() <= (shooter/100)){
-      shooterMotor1.set(shooter/100);
-      shooterMotor2.set(-(shooter/100));
-      kickerMotor.set(kicker/100);
-    }
+    shooterMotor1.set(shooter/100);
+    shooterMotor2.set(-(shooter/100));
+    kickerMotor.set(kicker/100);
   }
 
   public void setKickerVelocity(double speedRPS){
@@ -106,10 +104,14 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(){
+  public void shooterShoot(double xDist){
     //if(){
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX()));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(xDist));
     //}
+  }
+
+  public double getShooterShoot(){
+    return shooterCalcV2.getRPSForDistance(camera.getX());
   }
 
   @Override
