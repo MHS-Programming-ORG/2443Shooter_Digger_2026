@@ -5,11 +5,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
-  private double kickerDelay, kickerVel, shooterVel, conveyorVel;
+  private double kickerDelay, kickerVel, distance, conveyorVel;
   private Timer timer;
 
   public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double distance, double kickerVel, double conveyorVel) {
@@ -21,7 +22,7 @@ public class RossShootCommand extends Command {
 
     this.timer = new Timer();
     this.kickerDelay = kickerDelay;
-    this.shooterVel = distance;
+    this.distance = distance;
     this.kickerVel = kickerVel;
     this.conveyorVel = conveyorVel;
   }
@@ -31,8 +32,8 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    // shooterSub.setShooterVelocity(shooterVel);
-    shooterSub.shooterShoot(shooterVel);
+    shooterSub.setShooterVelocity(distance);
+    // shooterSub.shooterShoot(distance);
     shooterSub.setKickerVelocity(kickerVel);
   }
 
@@ -43,6 +44,7 @@ public class RossShootCommand extends Command {
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
     //MathUtil.isNear(shooterSub.getShooterShoot(), shooterSub.getShooterVelocity(), 3)
+    SmartDashboard.putNumber("RPS", shooterSub.getShooterShoot(distance));
     if (timer.get() >= kickerDelay) {
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
@@ -56,7 +58,7 @@ public class RossShootCommand extends Command {
     shooterSub.stopShooterMotors();
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
-    if(MathUtil.isNear(shooterSub.getShooterShoot(), 20, 3)){
+    if(MathUtil.isNear(shooterSub.getShooterShoot(distance), 20, 3)){
       shooterSub.setShooterNKickerIdle(conveyorVel, kickerDelay);
     }
   }
