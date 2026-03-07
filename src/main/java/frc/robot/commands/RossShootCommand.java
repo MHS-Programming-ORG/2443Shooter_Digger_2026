@@ -12,7 +12,7 @@ public class RossShootCommand extends Command {
   private double kickerDelay, kickerVel, shooterVel, conveyorVel;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double shooterVel, double kickerVel, double conveyorVel) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double distance, double kickerVel, double conveyorVel) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -21,7 +21,7 @@ public class RossShootCommand extends Command {
 
     this.timer = new Timer();
     this.kickerDelay = kickerDelay;
-    this.shooterVel = shooterVel;
+    this.shooterVel = distance;
     this.kickerVel = kickerVel;
     this.conveyorVel = conveyorVel;
   }
@@ -32,7 +32,7 @@ public class RossShootCommand extends Command {
 
     // Run the shooter to let it spin up
     // shooterSub.setShooterVelocity(shooterVel);
-    shooterSub.shooterShoot();
+    shooterSub.shooterShoot(shooterVel);
     shooterSub.setKickerVelocity(kickerVel);
   }
 

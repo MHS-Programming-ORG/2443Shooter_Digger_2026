@@ -19,7 +19,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static double xDistance = 0;
   private static final double[] shooterConfigVals = {0.66, 0.1904296875, 0.07};
   private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
   private ShooterCalcV2 shooterCalcV2;
@@ -65,10 +64,6 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerMotor.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public static void setXDist(double newXDist){
-    xDistance = newXDist;
-  }
-
   public void setShooterNKickerIdle(double shooter, double kicker){
     shooterMotor1.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
     shooterMotor2.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
@@ -108,9 +103,9 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(){
+  public void shooterShoot(double xDist){
     //if(){
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(xDistance));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(xDist));
     //}
   }
 
