@@ -4,22 +4,24 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CameraServerJNI;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ArduCam;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
- * this project, you must also update the Main.java file in the project.
+ * this project, you must also update the Main.java file in the project.sws
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final ArduCam camera = new ArduCam();
-  private final frc.robot.subsystems.ShooterSubsystem shooterSubsystem = new frc.robot.subsystems.ShooterSubsystem(camera, 15, 16, 17);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -28,6 +30,9 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    // CameraServer.startAutomaticCapture();
+    // CameraServerJNI.setSourceResolution(0, 1920, 1080);
+    // CameraServerJNI.setSourceFPS(0, 20);
     m_robotContainer = new RobotContainer();
   }
 
@@ -50,7 +55,8 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    shooterSubsystem.stopShooterMotors();
+    m_robotContainer.getShooterSubsystem().stopShooterMotors();
+    m_robotContainer.getShooterSubsystem().stopKickerMotor();
   }
 
   @Override
@@ -60,6 +66,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_robotContainer.getShooterSubsystem().setShooterNKickerIdle(20, 20);
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -84,7 +91,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // m_robotContainer.getShooterSubsystem().setShooterNKickerIdle(20, 20);
+  }
 
   @Override
   public void testInit() {

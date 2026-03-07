@@ -1,23 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.RossShootCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
+  private double kickerDelay, kickerVel, distance, conveyorVel;
   private Timer timer;
-  private static final double defaultKickerDelay = 2.0;
-  private double kickerDelay;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub ) {
-	 // Call the other constructor and use the "defaultKickerDelay" as the kicker delay
-    this(shooterSub, conveyorSub, defaultKickerDelay);
-  }
-
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay ) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double distance, double kickerVel, double conveyorVel) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -26,6 +22,9 @@ public class RossShootCommand extends Command {
 
     this.timer = new Timer();
     this.kickerDelay = kickerDelay;
+    this.distance = distance;
+    this.kickerVel = kickerVel;
+    this.conveyorVel = conveyorVel;
   }
 
   @Override
@@ -33,7 +32,9 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    shooterSub.setShooterVelocity(45); // half of the value here is outputted
+    shooterSub.setShooterVelocity(distance);
+    // shooterSub.shooterShoot(distance);
+    shooterSub.setKickerVelocity(kickerVel);
   }
 
   @Override
@@ -42,9 +43,10 @@ public class RossShootCommand extends Command {
     // command is running.
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
-    if (timer.get() > kickerDelay) {
-      shooterSub.setShooterGuideSpeed(45);
-      conveyorSub.setConveyorSpeed(0.4);
+    //MathUtil.isNear(shooterSub.getShooterShoot(), shooterSub.getShooterVelocity(), 3)
+    SmartDashboard.putNumber("RPS", shooterSub.getShooterShoot(distance));
+    if (timer.get() >= kickerDelay) {
+      conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }
 
@@ -52,10 +54,13 @@ public class RossShootCommand extends Command {
   public void end(boolean interrupted) {
     // Stop all motors since the command has ended.
     // This should still be called if the command in cancelled
+    shooterSub.stopKickerMotor();
     shooterSub.stopShooterMotors();
-    shooterSub.setShooterGuideSpeed(0.0);
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
+    if(MathUtil.isNear(shooterSub.getShooterShoot(distance), 20, 3)){
+      shooterSub.setShooterNKickerIdle(conveyorVel, kickerDelay);
+    }
   }
 
   @Override

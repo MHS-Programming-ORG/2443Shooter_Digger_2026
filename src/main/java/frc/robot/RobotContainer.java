@@ -1,9 +1,6 @@
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.KickerCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -22,28 +19,24 @@ public class RobotContainer {
   private final CommandXboxController xbox = new CommandXboxController(0);
 
   // Create the command object
-  private final RossShootCommand rossShootCmd = new RossShootCommand(
-    shooterSub,  // Input the ShooterSubsystem object
-    conveyorSub,  // Input the ConveyorSubsystem object
-	 1.0           // Input the delay between when the shooter and the kicker starts
-  );
+  //RossShootCommand Parameter: Shooter Sub, conveyor sub, kicker delay(seconds), Shooter Velocity(RPS), Kicker velocity(RPS), Conveyor Velocity(%)
+  private final RossShootCommand rossShootCmd = new RossShootCommand(shooterSub, conveyorSub, 
+  2, 50, 55, 0.5);
 
   public RobotContainer() {
+
     configureBindings();
   }
 
   private void configureBindings() {
-    // xbox.x().onTrue(shooterCmd);
-    // xbox.y().onTrue(new StopShooter(shooterSub));
-    // xbox.rightBumper().onTrue(new KickerCommand(shooterSub));
-    // xbox.leftBumper().onTrue(new InstantCommand (() -> shooterSub.setShooterGuideSpeed(0)));
-    // xbox.leftBumper().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
-    // xbox.a().whileTrue(new InstantCommand(() -> new ConveyorSubsystem(18).setConveyorSpeed(0.4)));
-    // xbox.a().whileFalse(new InstantCommand(() -> new ConveyorSubsystem(18).setConveyorSpeed(0)));
-    //xbox.leftBumper().whileFalse(new InstantCommand(() -> shooterSub.setShooterGuideSpeed(0)));
-
     xbox.x().whileTrue( rossShootCmd );
+    // xbox.x().whileTrue(new InstantCommand(() -> shooterSub.shooterShoot()));
   }
+
+  public ShooterSubsystem getShooterSubsystem(){
+    return new ShooterSubsystem(camera, 15, 16, 17);
+  }
+
   public Command getAutonomousCommand() {
     return null;
   }

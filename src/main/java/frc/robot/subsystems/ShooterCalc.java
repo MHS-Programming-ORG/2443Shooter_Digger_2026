@@ -4,18 +4,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ShooterCalc {
 
     private static final double G = 9.81;
     private final double INCH_TO_METER = 0.0254;
 
     // change these the height is right im pretty sure
-    private final double angleDegree = 30.0;
     private final double shooterHeightOffset = 20 * INCH_TO_METER;
     private final double hubHeight = 72 * INCH_TO_METER; //The 2.75 is like a spacer so hopeuflly above lip idk
 
-    private final double wheelRadiusMeters = 2.25 * INCH_TO_METER;
+    private final double wheelRadiusMeters = 2 * INCH_TO_METER;
     private final double gearRatio = 1.0; // motor : wheel
+    private final double angleDegree = 60.0;
 
     public double calculateLaunchVelocity(double distanceMeters) {
         double theta = Math.toRadians(angleDegree);
@@ -29,6 +31,6 @@ public class ShooterCalc {
     public double calculateMotorRPS(double distanceMeters) {
         //  + (13.314522 * INCH_TO_METER)
         double launchVelocity = calculateLaunchVelocity(distanceMeters);
-        return (launchVelocity / (2 * Math.PI * wheelRadiusMeters)) * gearRatio;
-  }
+        return ((launchVelocity / (2 * Math.PI * wheelRadiusMeters))) * gearRatio;
+    }
 }
