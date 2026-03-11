@@ -18,8 +18,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterConfigVals = {0.7, 0.1904296875, 0.07};
-  private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
+  private static final double[] shooterConfigVals = {0.7, 0, 0.1904296875, 0.07};
+  private static final double[] kickerConfigVals = {0.7, 0.4501953125, 0.06499999761581421};
   private ShooterCalcV2 shooterCalcV2;
   private ArduCam camera = new ArduCam();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
@@ -34,15 +34,16 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerMotor = new TalonFX(kickerPort);
 
     var sLimitsConfig = new CurrentLimitsConfigs();
-    sLimitsConfig.StatorCurrentLimit = 40;
+    sLimitsConfig.StatorCurrentLimit = 20;
     sLimitsConfig.SupplyCurrentLimit = 20;
     sLimitsConfig.SupplyCurrentLimitEnable = true;
     sLimitsConfig.StatorCurrentLimitEnable = true;
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.Slot0.kP = shooterConfigVals[0];
-    shooterConfig.Slot0.kS = shooterConfigVals[1];
-    shooterConfig.Slot0.kV = shooterConfigVals[2];
+    shooterConfig.Slot0.kI = shooterConfigVals[1];
+    shooterConfig.Slot0.kS = shooterConfigVals[2];
+    shooterConfig.Slot0.kV = shooterConfigVals[3];
     shooterConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
 
     var kickerConfig = new TalonFXConfiguration();
@@ -61,15 +62,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
     kickerMotor.setNeutralMode(NeutralModeValue.Coast);
-  }
-
-  public void setShooterNKickerIdle(double shooter, double kicker){
-    shooterMotor1.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
-    shooterMotor2.setControl(velocityRequest.withVelocity(shooter).withSlot(1));
-    kickerMotor.setControl(velocityRequest.withVelocity(kicker).withSlot(1));
-    shooterMotor1.set(shooter/100);
-    shooterMotor2.set(-(shooter/100));
-    kickerMotor.set(kicker/100);
   }
 
   public void setKickerVelocity(double speedRPS){

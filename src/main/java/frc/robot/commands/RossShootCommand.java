@@ -32,8 +32,8 @@ public class RossShootCommand extends Command {
     timer.restart(); // Reset the timer
 
     // Run the shooter to let it spin up
-    shooterSub.setShooterVelocity(distance);
     // shooterSub.shooterShoot(distance);
+    shooterSub.setShooterVelocity(distance);
     shooterSub.setKickerVelocity(kickerVel);
   }
 
@@ -43,9 +43,9 @@ public class RossShootCommand extends Command {
     // command is running.
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
-    //MathUtil.isNear(shooterSub.getShooterShoot(), shooterSub.getShooterVelocity(), 3)
+    //MathUtil.isNear(shooterSub.getShooterShoot(distance), shooterSub.getShooterVelocity(), 3)
     SmartDashboard.putNumber("RPS", shooterSub.getShooterShoot(distance));
-    if (timer.get() >= kickerDelay) {
+    if (MathUtil.isNear(shooterSub.getShooterShoot(distance), shooterSub.getShooterVelocity(), 3)) {
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }
@@ -58,9 +58,6 @@ public class RossShootCommand extends Command {
     shooterSub.stopShooterMotors();
     conveyorSub.setConveyorSpeed(0.0);
     timer.stop();
-    if(MathUtil.isNear(shooterSub.getShooterShoot(distance), 20, 3)){
-      shooterSub.setShooterNKickerIdle(conveyorVel, kickerDelay);
-    }
   }
 
   @Override
